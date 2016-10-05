@@ -8,7 +8,7 @@ var Enemy = function(x, y) {
     this.x = x;
     this.y = y;
     this.multiplier = Math.floor((Math.random() * 4) + 1);
-    console.log(this.multiplier);
+    // console.log(this.multiplier);
 };
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
@@ -17,11 +17,22 @@ Enemy.prototype.update = function(dt) {
     // which will ensure the game runs at the same speed for
     // all computers.
     this.x = this.x + 101 * dt * this.multiplier;
+
+    // If the bug goes off of the board, reset its position and randomize the multiplier
+    if (this.x > 650) {
+        this.multiplier = Math.floor((Math.random() * 4) + 1);
+        this.reset();
+    }
 };
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
+
+Enemy.prototype.reset = function(){
+    this.x = -200;
+};
+
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
@@ -44,13 +55,13 @@ Player.prototype.handleInput = function(direction) {
 
     } else if (direction === 'right') {
         this.x = this.x + 101;
-    };
+    }
 
     if (this.x < 0 || this.x > 404) {
         this.reset();
     } else if (this.y < -25 || this.y > 404) {
         this.reset();
-    };
+    }
 };
 
 Player.prototype.update = function() {
@@ -64,7 +75,7 @@ Player.prototype.render = function() {
 Player.prototype.reset = function() {
     this.x = 202;
     this.y = 380;
-}
+};
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
@@ -73,6 +84,16 @@ ladyBug2 = new Enemy(-303, 130);
 ladyBug3 = new Enemy (-505, 45);
 allEnemies = [ladyBug1, ladyBug2, ladyBug3];
 player = new Player(202, 380);
+
+// var allEnemies = [];
+// var ladyBugYValues = [213, 130, 45];
+// for (var i = 0; i < 6; i++) {
+//     var x = Math.floor((Math.random() * -1000) + 1);
+//     var y = ladyBugYValues[Math.floor((Math.random() * 3))];
+//     enemy = new Enemy(x, y);
+//     allEnemies.push(enemy);
+// }// player = new Player(202, 380);
+
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
 document.addEventListener('keyup', function(e) {
