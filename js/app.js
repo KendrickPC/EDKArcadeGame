@@ -7,7 +7,7 @@ var Enemy = function(x, y) {
     this.sprite = 'images/enemy-bug.png';
     this.x = x;
     this.y = y;
-    this.multiplier = Math.floor((Math.random() * 4) + 1);
+    this.multiplier = Math.floor((Math.random() * 3) + 1);
     // console.log(this.multiplier);
 };
 // Update the enemy's position, required method for game
@@ -18,10 +18,9 @@ Enemy.prototype.update = function(dt) {
     // all computers.
     this.x = this.x + 101 * dt * this.multiplier;
 
-    // If the bug goes off of the board, reset its position and randomize the multiplier
-    if (this.x > 650) {
-        this.multiplier = Math.floor((Math.random() * 4) + 1);
-        this.reset();
+    if (this.y == player.y && (this.x > player.x - 20 && this.x < player.x + 20)) {
+        console.log('attack!!!');
+        player.reset();
     }
 };
 // Draw the enemy on the screen, required method for game
@@ -29,15 +28,15 @@ Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-Enemy.prototype.reset = function(){
-    this.x = -200;
-};
+// Enemy.prototype.reset = function(){
+//     this.x = -200;
+// };
 
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
 var Player = function(x, y) {
-    this.sprite = 'images/char-princess-girl.png';
+    this.sprite = 'images/char-boy.png';
     this.x = x;
     this.y = y;
 };
@@ -79,9 +78,9 @@ Player.prototype.reset = function() {
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
-ladyBug1 = new Enemy(0, 213);
-ladyBug2 = new Enemy(-303, 130);
-ladyBug3 = new Enemy (-505, 45);
+ladyBug1 = new Enemy(0, 220);
+ladyBug2 = new Enemy(-303, 140);
+ladyBug3 = new Enemy (-505, 60);
 allEnemies = [ladyBug1, ladyBug2, ladyBug3];
 player = new Player(202, 380);
 

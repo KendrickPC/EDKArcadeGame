@@ -8,6 +8,8 @@ var Enemy = function(x,y) {
     this.sprite = 'images/enemy-bug.png';
     this.x = x;
     this.y = y;
+    this.multiplier = Math.floor((Math.random() * 4) + 1);
+    console.log(this.multiplier);
 };
 
 // Update the enemy's position, required method for game
@@ -16,7 +18,12 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
-    this.x = this.x + 101 * dt;
+    this.x = this.x + 101 * dt * this.multiplier;
+
+    if (this.y == player.y && (this.x > player.x - 20 && this.x < player.x + 20)) {
+        console.log('attack!!!');
+        player.reset();
+    };
 };
 
 // Draw the enemy on the screen, required method for game
@@ -74,7 +81,7 @@ Player.prototype.render = function() {
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
-enemy1 = new Enemy(0, 280);
+enemy1 = new Enemy(0, 225);
 enemy2 = new Enemy(-303, 140);
 enemy3 = new Enemy (-505, 60);
 allEnemies = [enemy1, enemy2, enemy3];
