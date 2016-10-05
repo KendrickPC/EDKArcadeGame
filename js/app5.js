@@ -9,7 +9,6 @@ var Enemy = function(x,y) {
     this.x = x;
     this.y = y;
     this.multiplier = Math.floor((Math.random() * 4) + 1);
-    console.log(this.multiplier);
 };
 
 // Update the enemy's position, required method for game
@@ -21,9 +20,23 @@ Enemy.prototype.update = function(dt) {
     this.x = this.x + 101 * dt * this.multiplier;
 
     if (this.y == player.y && (this.x > player.x - 20 && this.x < player.x + 20)) {
-        console.log('attack!!!');
+        // player.lives--;
+        // if (player.lives === 0) {
+            // TODO: Add logic here for doing a 'game over'
+        // document.getElementsByClassName('lives')[0].innerHTML = 'Lives: ' + player.lives;
         player.reset();
-    };
+    }
+
+    // If the bug goes off of the board, reset its position and randomize the multiplier
+    if (this.x > 650) {
+        this.multiplier = Math.floor((Math.random() * 4) + 1);
+        this.reset();
+    }
+};
+
+// Reset the enemy to the left of the board
+Enemy.prototype.reset = function() {
+    this.x = -200;
 };
 
 // Draw the enemy on the screen, required method for game
@@ -38,6 +51,8 @@ var Player = function(x,y) {
     this.sprite = 'images/char-boy.png';
     this.x = x;
     this.y = y;
+    this.score = 0;
+    this.lives = 5;
 };
 
 Player.prototype.handleInput = function(dir) {
@@ -54,20 +69,24 @@ Player.prototype.handleInput = function(dir) {
     } else if (dir == 'right') {
         this.x = this.x + 101;
 
-    };
+    }
 
     if (this.x < 0 || this.x > 404) {
         this.reset();
-    } else if (this.y < -25 || this.y > 404) {
+    } else if (this.y > 404) {
         this.reset();
-    };
+    } else if (this.y <= -20) {
+        this.score++;
+        // document.getElementsByClassName('score')[0].innerHTML = 'Score: ' + this.score;
+        this.reset();
+    }
 
 };
 
 Player.prototype.reset = function() {
     this.x = 202;
     this.y = 380;
-}
+};
 
 Player.prototype.update = function() {
     this.x = this.x;
@@ -81,10 +100,14 @@ Player.prototype.render = function() {
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
-enemy1 = new Enemy(0, 225);
-enemy2 = new Enemy(-303, 140);
-enemy3 = new Enemy (-505, 60);
-allEnemies = [enemy1, enemy2, enemy3];
+var allEnemies = [];
+var yVals = [220, 140, 60];
+for (var i = 0; i < 6; i++) {
+    var x = Math.floor((Math.random() * -1000) + 1);
+    var y = yVals[Math.floor((Math.random() * 3))];
+    enemy = new Enemy(x, y);
+    allEnemies.push(enemy);
+}
 
 player = new Player(202, 380);
 

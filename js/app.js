@@ -7,7 +7,7 @@ var Enemy = function(x, y) {
     this.sprite = 'images/enemy-bug.png';
     this.x = x;
     this.y = y;
-    this.multiplier = Math.floor((Math.random() * 3) + 1);
+    this.multiplier = Math.floor((Math.random() * 4) + 1);
     // console.log(this.multiplier);
 };
 // Update the enemy's position, required method for game
@@ -19,8 +19,14 @@ Enemy.prototype.update = function(dt) {
     this.x = this.x + 101 * dt * this.multiplier;
 
     if (this.y == player.y && (this.x > player.x - 20 && this.x < player.x + 20)) {
-        console.log('attack!!!');
+        // console.log('Collision Logic Successful!!!');
         player.reset();
+    }
+
+    // If the officer goes off screen, this if statement resets their position with a random multiplier
+    if (this.x > 650) {
+        this.multiplier = Math.floor((Math.random() * 4) + 1);
+        this.reset();
     }
 };
 // Draw the enemy on the screen, required method for game
@@ -28,9 +34,9 @@ Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-// Enemy.prototype.reset = function(){
-//     this.x = -200;
-// };
+Enemy.prototype.reset = function(){
+    this.x = -200;
+};
 
 // Now write your own player class
 // This class requires an update(), render() and
@@ -58,7 +64,7 @@ Player.prototype.handleInput = function(direction) {
 
     if (this.x < 0 || this.x > 404) {
         this.reset();
-    } else if (this.y < -25 || this.y > 404) {
+    } else if (this.y < -20 || this.y > 404) {
         this.reset();
     }
 };
@@ -78,20 +84,16 @@ Player.prototype.reset = function() {
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
-ladyBug1 = new Enemy(0, 220);
-ladyBug2 = new Enemy(-303, 140);
-ladyBug3 = new Enemy (-505, 60);
-allEnemies = [ladyBug1, ladyBug2, ladyBug3];
-player = new Player(202, 380);
 
-// var allEnemies = [];
-// var ladyBugYValues = [213, 130, 45];
-// for (var i = 0; i < 6; i++) {
-//     var x = Math.floor((Math.random() * -1000) + 1);
-//     var y = ladyBugYValues[Math.floor((Math.random() * 3))];
-//     enemy = new Enemy(x, y);
-//     allEnemies.push(enemy);
-// }// player = new Player(202, 380);
+var allEnemies = [];
+var ladyBugYValues = [220, 140, 60];
+for (var i = 0; i < 15; i++) {
+    var x = Math.floor((Math.random() * -1000) + 1);
+    var y = ladyBugYValues[Math.floor((Math.random() * 3))];
+    enemy = new Enemy(x, y);
+    allEnemies.push(enemy);
+} 
+player = new Player(202, 380);
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
