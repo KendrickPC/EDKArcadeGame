@@ -24,7 +24,7 @@ Enemy.prototype.update = function(dt) {
     }
 
     // If the officer goes off screen, this if statement resets their position with a random multiplier
-    if (this.x > 650) {
+    if (this.x > 720) {
         this.multiplier = Math.floor((Math.random() * 4) + 1);
         this.reset();
     }
@@ -62,7 +62,7 @@ Player.prototype.handleInput = function(direction) {
         this.x = this.x + 101;
     }
 
-    if (this.x < 0 || this.x > 404) {
+    if (this.x < 0 || this.x > 606) {
         this.reset();
     } else if (this.y < -20 || this.y > 404) {
         this.reset();
@@ -78,7 +78,7 @@ Player.prototype.render = function() {
 };
 
 Player.prototype.reset = function() {
-    this.x = 202;
+    this.x = 303;
     this.y = 380;
 };
 // Now instantiate your objects.
@@ -93,7 +93,7 @@ for (var i = 0; i < 15; i++) {
     enemy = new Enemy(x, y);
     allEnemies.push(enemy);
 } 
-player = new Player(202, 380);
+player = new Player(303, 380);
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
@@ -106,17 +106,3 @@ document.addEventListener('keyup', function(e) {
     };
     player.handleInput(allowedKeys[e.keyCode]);
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
