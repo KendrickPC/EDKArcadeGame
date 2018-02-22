@@ -4,10 +4,31 @@ var Game = function() {
     this.paused=false;
     this.gameOn=false;
     this.itemDisplayIndex=0;
-    this.gameTextIntroduction = [
+    this.gameTextInstructions = [
         ['abcdefg','12345','abcdefg','12345','abcdefg','12345','abcdefg','12345','abcdefg','12345']
     ]
 };
+
+// global scope 'game' variable that initializes my game, but can't be placed on the top of the file
+game = new Game();
+
+// Boolean (used in Enemy.update and Player.handleInput) that toggles between paused and un-paused game states by blocking updates
+Game.prototype.togglePause=function() {
+    this.paused=!this.paused;
+}
+// Increases one enemy at the end of successful run count through the player count variable
+Game.prototype.addOneEnemy=function()  {
+// Adding one more enemy is determined by summing up all current enemies and adding one more enemy to the next row. When all rows are filled, enemies will be added to the first row again.
+  var rows=4;
+  var count=allEnemies.length+1;
+// Enemies loop  to the top if the count is > than rows available
+  if(count>rows) {
+    count-=rows;
+  }
+// Adding a new Enemy to the allEnemies array
+  var enemy=new Enemy(-100, (count*83)-21);
+  allEnemies.push(enemy);
+}
 
 // Enemies our player must avoid
 var Enemy = function(x, y) {
@@ -105,8 +126,7 @@ for (var i = 0; i < 15; i++) {
     allEnemies.push(enemy);
 } 
 player = new Player(303, 380);
-// global scope 'game' variable that initializes my game
-game = new Game();
+
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
 document.addEventListener('keyup', function(e) {

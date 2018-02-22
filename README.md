@@ -6,4 +6,5 @@ Object Oriented JavaScript || Every Day Kenneth's Remix
 HTML 5 Canvas API Documentation:
 https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API
 
-[x]resources.js file complete
+[x] resources.js file complete
+[x] global scope game variable loaded
