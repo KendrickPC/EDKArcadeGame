@@ -1,3 +1,14 @@
+// define 'game' variable and hold functions called to 'game' in engine.js 
+var Game = function() {
+    // initializing game variables    
+    this.paused=false;
+    this.gameOn=false;
+    this.itemDisplayIndex=0;
+    this.gameTextIntroduction = [
+        ['abcdefg','12345','abcdefg','12345','abcdefg','12345','abcdefg','12345','abcdefg','12345']
+    ]
+};
+
 // Enemies our player must avoid
 var Enemy = function(x, y) {
     // Variables applied to each of our instances go here,
@@ -94,7 +105,8 @@ for (var i = 0; i < 15; i++) {
     allEnemies.push(enemy);
 } 
 player = new Player(303, 380);
-
+// global scope 'game' variable that initializes my game
+game = new Game();
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
 document.addEventListener('keyup', function(e) {

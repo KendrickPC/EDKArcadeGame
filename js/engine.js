@@ -11,7 +11,7 @@ var Engine = (function(global) {
 
     canvas.width = 707;
     canvas.height = 606;
-    document.getElementById('playing-field').appendChild(canvas);
+    document.getElementById('playingField').appendChild(canvas);
     // doc.body.appendChild(canvas);
 
     /* This function serves as the kickoff point for the game loop itself
@@ -22,7 +22,7 @@ var Engine = (function(global) {
          * requires smooth animation. Because everyone's computer processes
          * instructions at different speeds we need a constant value that
          * would be the same for everyone (regardless of how fast their
-         * computer is) - hurray time!
+         * computer is)
          */
         var now = Date.now(),
             dt = (now - lastTime) / 1000.0;
@@ -49,7 +49,7 @@ var Engine = (function(global) {
      * game loop.
      */
     function init() {
-        reset();
+        // reset();
         lastTime = Date.now();
         main();
     }
@@ -64,10 +64,12 @@ var Engine = (function(global) {
      * on the entities themselves within your app.js file).
      */
     function update(dt) {
+        if (game.gameOn) {
         updateEntities(dt);
-        // checkCollisions();
-    }
-
+        checkCollisions();
+        updateScore();
+        }
+    }    
     /* This is called by the update function  and loops through all of the
      * objects within your allEnemies array as defined in app.js and calls
      * their update() methods. It will then call the update function for your
@@ -79,9 +81,38 @@ var Engine = (function(global) {
         allEnemies.forEach(function(enemy) {
             enemy.update(dt);
         });
-        player.update();
     }
 
+    // collision check function
+    function checkCollisions() {
+    // Function checks for enemy collision
+    // 10 pixel difference alignment of enemy and player
+    // Y positions on the same row because sprites need centering
+    // Function collisions detected when opposite sides of X coordinates are within 75 pixels.
+    allEnemies.forEach(function(enemy)  {
+        if(player.y - enemy.y == 10)  {
+          if(player.x < enemy.x + 75 && player.x + 75 > enemy.x) {
+            player.playerLives--;
+            // dropping of Gem when player carrying
+            if(player.carryGem) {
+              if(gem.sprite === "images/Heart.png") {
+              gem.reset();
+              } else {
+                gem.drop();
+              }
+            }
+            player.reset();
+            } 
+          }
+        });
+
+        // Check for collision between player and the game, and take gem. 
+        if(player.y === gem.y && player.x === gem.x) {
+          gem.pickup();
+        }
+      }
+
+    
     /* This function initially draws the "game level", it will then call
      * the renderEntities function. Remember, this function is called every
      * game tick (or loop of the game engine) because that's how games work -
