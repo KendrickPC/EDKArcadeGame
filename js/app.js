@@ -30,6 +30,17 @@ Game.prototype.addOneEnemy=function()  {
   allEnemies.push(enemy);
 }
 
+// Initializing the game asset variables - called during startup of the game
+Game.prototype.gameReset=function(){
+    // Place all enemy objects in an array called allEnemies
+    allEnemies=[];
+    for(var i=0; i<5; i++) {
+        var enemy=new Enemy(0-1*101, 83*i-21);
+        allEnemies.push(enemy);
+    }
+}
+
+
 // Enemies our player must avoid
 var Enemy = function(x, y) {
     // Variables applied to each of our instances go here,
@@ -44,7 +55,7 @@ var Enemy = function(x, y) {
 };
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
-Enemy.prototype.update = function(dt) {
+Enemy.prototype.update=function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
@@ -114,7 +125,7 @@ Player.prototype.reset = function() {
     this.y = 380;
 };
 // Now instantiate your objects.
-// Place all enemy objects in an array called allEnemies
+
 // Place the player object in a variable called player
 
 var allEnemies = [];
