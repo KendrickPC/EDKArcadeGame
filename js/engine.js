@@ -215,14 +215,20 @@ var Engine = (function(global) {
      * on your enemy and player entities within app.js
      */
     function renderEntities() {
+        // render a gem if player is not holding a gem (gem.visible = true)
+        if(gem.visible) {
+            gem.render();
+        }
         /* Loop through all of the objects within the allEnemies array and call
          * the render function you have defined.
          */
         allEnemies.forEach(function(enemy) {
             enemy.render();
         });
-
+        // renders main player
         player.render();
+        // renders a score row
+        renderScoringRow();
     }
 
     /* This function does nothing but it could have been a good place to
