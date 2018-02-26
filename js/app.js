@@ -38,8 +38,29 @@ Game.prototype.gameReset=function(){
         var enemy=new Enemy(0-1*101, 83*i-21);
         allEnemies.push(enemy);
     }
-}
+    // storing main character object in a variable 'player'
+    // Note: 'var' is not used so that player is stored in the global scope
+    player = new Player(303,380);
+    // turns on game indicator
+    this.gameOn=true;
+};
 
+// handleInput links to the keyboard during the introduction frame of the game; displays gameplay instructions on game board and starts the game. @param {String} direction value of keypress is determined in the eventListener. 
+
+Game.prototype.handleInput=function(direction) {
+    switch(direction) {
+      case 'spacebar':
+        if (game.itemDisplayIndex<0) {
+            game.itemDisplayIndex++;
+            game.speakerToggle();
+        }   else {
+            game.itemDisplayIndex=1;
+            document.getElementById('instructions').className='';
+            game.gameReset();
+        }
+        break;
+    }
+};
 
 // Enemies our player must avoid
 var Enemy = function(x, y) {
@@ -116,6 +137,7 @@ Player.prototype.update = function() {
     this.x = this.x;
     this.y = this.y;
 };
+// Draw/render player onto screen
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
@@ -128,14 +150,14 @@ Player.prototype.reset = function() {
 
 // Place the player object in a variable called player
 
-var allEnemies = [];
-var ladyBugYValues = [220, 140, 60];
-for (var i = 0; i < 15; i++) {
-    var x = Math.floor((Math.random() * -1000) + 1);
-    var y = ladyBugYValues[Math.floor((Math.random() * 3))];
-    enemy = new Enemy(x, y);
-    allEnemies.push(enemy);
-} 
+
+// var ladyBugYValues = [220, 140, 60];
+// for (var i = 0; i < 15; i++) {
+//     var x = Math.floor((Math.random() * -1000) + 1);
+//     var y = ladyBugYValues[Math.floor((Math.random() * 3))];
+//     enemy = new Enemy(x, y);
+//     allEnemies.push(enemy);
+// } 
 player = new Player(303, 380);
 
 // This listens for key presses and sends the keys to your
