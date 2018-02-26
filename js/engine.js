@@ -174,6 +174,16 @@ var Engine = (function(global) {
      * they are just drawing the entire screen over and over.
      */
     function render() {
+        // topRowTiles array to render touchdown zone
+        var topRowTiles = [
+            'images/wood-block.png',
+            'images/wood-block.png',
+            'images/wood-block.png',
+            'images/wood-block.png',
+            'images/wood-block.png',
+            'images/wood-block.png',
+            'images/wood-block.png'
+        ];
         /* This array holds the relative URL to the image used
          * for that particular row of the game level.
          */

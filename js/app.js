@@ -101,14 +101,28 @@ Enemy.prototype.render = function() {
 Enemy.prototype.reset = function(){
     this.x = -200;
 };
+// increaseRate to increase enemy speeds
+Enemy.prototype.increaseRate = function() {
+    this.rate +=50;
+};
 
-// Now write your own player class
+// Global scope variable of Player class
 // This class requires an update(), render() and
-// a handleInput() method.
+// a handleInput() method - reset method added for touchdowns and score method added for point totals.
 var Player = function(x, y) {
     this.sprite = 'images/char-boy.png';
     this.x = x;
     this.y = y;
+    this.carryGem = false;
+    this.playerLives = 5;
+    this.greenGemScore = 0;
+    this.orangeGemScore = 0;
+    this.blueGemScore = 0;
+    this.totalScore = 0;
+    // resetScore needed for power ups
+    this.resetScore = 0;
+    // count needed to keep track of amount of touchdowns scored
+    this.count = 0;
 };
 
 Player.prototype.handleInput = function(direction) {
@@ -141,8 +155,21 @@ Player.prototype.update = function() {
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
-
+// Reset main player to starting position
 Player.prototype.reset = function() {
+    // reset main player sprite
+    if (this.y > 0 || (this.y <0 ** (!this.carryGem || !this.carryPowerUp))) {
+        this.sprite = 'images/char-boy.png';
+    }
+
+    // If player is carrying the pigskin or powerup, set carryGem to false and carryPowerUp to false. Also, modify sprite name to main player carrying the pigskin.
+
+    if (this.carryGem || this.carryPowerUp) {
+        this.carryGem = false;
+        this.carryPowerUp = false;
+        this.sprite = 'images/char-boy.png'
+    }
+    // reset main character to initial location
     this.x = 303;
     this.y = 380;
 };
