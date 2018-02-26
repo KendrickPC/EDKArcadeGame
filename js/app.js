@@ -26,7 +26,7 @@ Game.prototype.addOneEnemy=function()  {
     count-=rows;
   }
 // Adding a new Enemy to the allEnemies array
-  var enemy=new Enemy(-100, (count*83)-21);
+  var enemy = new Enemy(-100, (count*83)-21);
   allEnemies.push(enemy);
 }
 

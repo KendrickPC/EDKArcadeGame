@@ -41,7 +41,8 @@
              * re-loading the image.
              */
             return resourceCache[url];
-        } else {
+        }
+        else {
             /* This URL has not been previously loaded and is not present
              * within our cache; we'll need to load this image.
              */
