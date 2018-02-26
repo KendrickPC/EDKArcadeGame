@@ -108,11 +108,57 @@ var Engine = (function(global) {
 
         // Check for collision between player and the game, and take gem. 
         if(player.y === gem.y && player.x === gem.x) {
-          gem.pickup();
+            gem.pickup();
         }
       }
+    // updateScore function when gems are collected
+    function updateScore() {
+        if (player.playerLives === 0) {
+            gameOver();
+            }
 
-    
+        if(player.y < 0 && (player.carryGem || player.carryPowerUp))  {
+            // update player gem score
+            player.score();
+
+            if(gem.greenGemCount === 5){
+                player.playerLives++;
+                gem.greenGemCount = 0;
+            }  
+            else if(gem.orangeGemCount === 5) {
+                player.playerLives++;
+                game.orangeGemCount = 0;
+            }
+            else if(gem.blueGemCount === 5) {
+                player.playerLives++;
+                gem.blueGemCount = 0;
+            }
+
+        if(gem.sprite === "images/Heart.png") {
+            player.totalScore += 0;
+            }
+        else {
+            player.totalScore += 30;
+            }
+        // adding 1 into player count to add an enemy
+        player.count++;
+        // reset the player at the initial position after it reaches the touchdown zone
+        player.reset();
+        // reset the gem when it reaches the touchdown zone
+        gem.reset();
+        // speed increase for enemies
+        if(allEnemies.rate <= 200){
+            allEnemies.forEach(function(enemy) {
+                enemy.increaseRate();
+                });
+            };
+        // add enemies until allEnemies.length < 8
+        if(player.count === allEnemies.length && allEnemies.length < 8) {
+            game.addAnEnemy();
+            }
+        }
+    }
+
     /* This function initially draws the "game level", it will then call
      * the renderEntities function. Remember, this function is called every
      * game tick (or loop of the game engine) because that's how games work -
