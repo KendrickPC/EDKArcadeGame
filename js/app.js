@@ -173,8 +173,38 @@ Player.prototype.reset = function() {
     this.x = 303;
     this.y = 380;
 };
-// Now instantiate your objects.
 
+// Create an images array of gems and hearts
+gemImages = [
+    'images/Gem-Green.png',
+    'images/Gem-Orange.png',
+    'images/Gem-Blue.png',
+    'images/Heart.png'
+];
+
+// Defining Gem class
+var Gem = function (x, y) {
+    this.x = x;
+    this.y = y;
+    this.visible = true;
+    this.sprite = gemImages[Math.floor(Math.random() * 4)];
+    // Counts the green gems collected
+    this.greenGemCount = 0;
+    // Counts the orange gems collected
+    this.orangeGemCount = 0;
+    // Counts the blue gems collected
+    this.blueGemCount = 0;
+};
+
+// Draw the Gem/Pigskin on the playingField
+Gem.prototype.render = function () {
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+};
+
+// Writing out code for when the main player picks up a Gem/Pigskin
+Gem.prototype.pickup = function () {
+
+}
 // Place the player object in a variable called player
 
 

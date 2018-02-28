@@ -8,3 +8,7 @@ https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API
 
 [x] resources.js file complete
 [x] global scope game variable loaded
+
+
+Changes Needed to be made: 
+[] Engine.js method array scoreGemImage needs to be changed out
