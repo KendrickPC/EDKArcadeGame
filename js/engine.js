@@ -224,10 +224,6 @@ var Engine = (function(global) {
         }
     }
 
-    // The bubbleRect() function was taken from the following links: 
-    // http://js-bits.blogspot.tw/2010/07/canvas-rounded-corner-rectangles.html
-    // http://www.html5.jp/canvas/ref/method/quadraticCurveTo.html
-
     // The function below draws the introduction and gameOver scene.  
     function renderIntro() {
         bubbleRect(125,160,460,240,25,10,'#fff','#000');
@@ -236,14 +232,66 @@ var Engine = (function(global) {
 
     // The following function takes code from the storyText array in the app.js file - renders the text in the story bbuble above. helpText is rendered at the bottom of screen to indicate the spacebar key function.
     function renderStory() {
-        ctx.font = '14pt Helvetica';
+        ctx.font = '12pt Helvetica';
         ctx.fillStyle = '#000';
-    } 
+        for (i = 0; i < game.itemDisplayIndex[game.gameTextInstructions].length; i++){
+            ctx.fillText(game.itemDisplayIndex[game.gameTextInstructions] [i], 150, 207 + 1 * 25);
+        }
+        ctx.strokeStyle = '#fff';
+
+        var helpText = 'Press the spacebar to continue';
+        if (game.gameTextInstructions < 1) {
+            helpText = 'Press the spacebar to continue';
+        } else {
+            helpText = 'Press the spacebar to continue'}
+        ctx.lineWidth = 5;
+        ctx.strokeText(helpText, 225, 515);
+        ctx.fillText(helpText, 225, 515);
+        }
+
+    /**
+     * Draws a rounded rectangle using the current state of the canvas. 
+     * If you omit the last three params, it will draw a rectangle 
+     * outline with a 5 pixel border radius 
+     * @param {CanvasRenderingContext2D} ctx
+     * @param {Number} x The top left x coordinate
+     * @param {Number} y The top left y coordinate 
+     * @param {Number} width The width of the rectangle 
+     * @param {Number} height The height of the rectangle
+     * @param {Number} radius The corner radius. Defaults to 5;
+     * @param {Boolean} fill Whether to fill the rectangle. Defaults to false.
+     * @param {Boolean} stroke Whether to stroke the rectangle. Defaults to true.
+     */
+
+    // The bubbleRect() function was taken from the following links: 
+    // http://js-bits.blogspot.tw/2010/07/canvas-rounded-corner-rectangles.html
+    // http://www.html5.jp/canvas/ref/method/quadraticCurveTo.html
 
     /* This function is called by the render function and is called on each game
      * tick. It's purpose is to then call the render functions you have defined
      * on your enemy and player entities within app.js
      */
+
+    function bubbleRect(x, y, width, height, radius, lineWidth, fill, stroke) {
+    ctx.lineWidth = lineWidth;
+    ctx.fillStyle = fill;
+    ctx.strokeStyle = stroke;
+    ctx.beginPath();
+    ctx.moveTo(x + radius, y);
+    ctx.lineTo(x + width - radius, y);
+    ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+    ctx.lineTo(x + width, y + height - radius);
+    ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+    ctx.lineTo(x + radius, y + height);
+    ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+    ctx.lineTo(x, y + radius);
+    ctx.quadraticCurveTo(x, y, x + radius, y);
+    ctx.closePath();
+    ctx.stroke();
+    ctx.fill();
+    }
+
+
     function renderEntities() {
         // render a gem if player is not holding a gem (gem.visible = true)
         if(gem.visible) {
@@ -268,15 +316,35 @@ var Engine = (function(global) {
             'images/Gem-Orange.png',
             'images/Gem-Blue.png',
             'images/Heart.png',
-        ]
+        ];
+
+    // drawing images of gems above the touchdown zone
+    for (var col = 0; col < 4; col++) {
+        ctx.drawImage(Resources.get(scoreGemImage[col]), (col * 202) + 10, -20);
     }
-    /* This function does nothing but it could have been a good place to
-     * handle game reset states - maybe a new game menu or a game over screen
-     * those sorts of things. It's only called once by the init() method.
-     */
 
+    // scoreNum array to hold main player's gem/pigskin variable
+    var scoreNum = [player.greenGemScore, player.orangeGemScore, player.blueGemScore, player.playerLives]
 
-    /* Go ahead and load all of the images we know we're going to need to
+    // gemName is an array to hold gem/pigskin name and player life
+    var gemName = ['Green Gem', 'Orange Gem', 'Blue Gem', 'Player Life']
+
+    // text for gem score and gem name on board
+    for(var i = 0; i < 4; i++) {
+        ctx.lineWidth = 5;
+        ctx.strokeText(scoreNum[i], (i * 200) + 45, 65);
+        ctx.fillText(scoreNum[i], (i * 200) + 45, 65);
+        ctx.strokeText(gemName[i], (i * 200), 20);
+        ctx.fillText(gemName[i], (i * 200), 20);
+    }
+    // text for main player's total score on playingField
+    ctx.lineWidth = 5;
+    ctx.strokeText('Player Score: ' + player.totalScore, 402, 575);
+    ctx.fillText('Player Score: ' + player.totalScore, 402, 575);
+    }
+    // above is the end of the renderScoringRow function
+
+    /* Loads all of the images we know we're going to need to
      * draw our game level. Then set init as the callback method, so that when
      * all of these images are properly loaded our game will start.
      */
