@@ -10,8 +10,8 @@ var Engine = (function(global) {
         lastTime;
 
     canvas.width = 707;
-    canvas.height = 606;
-    document.getElementById('playingField').appendChild(canvas);
+    canvas.height = 656;
+    document.getElementById('game-board').appendChild(canvas);
     // doc.body.appendChild(canvas);
 
     /* This function serves as the kickoff point for the game loop itself
@@ -188,7 +188,7 @@ var Engine = (function(global) {
          * for that particular row of the game level.
          */
         var rowImages = [
-                'images/water-block.png',   // Top row is water
+                'images/wood-block.png',    // Top row is wood
                 'images/stone-block.png',   // Row 1 of 3 of stone
                 'images/stone-block.png',   // Row 2 of 3 of stone
                 'images/stone-block.png',   // Row 3 of 3 of stone
@@ -200,7 +200,7 @@ var Engine = (function(global) {
             row, col;
 
         // Loop through columns to draw the touchdown zone
-        for (row = 0; col < numCols; row++) {
+        for (col = 0; col < numCols; col++) {
             ctx.drawImage(Resources.get(topRowTiles[col]), col * 101, -50);
             ctx.drawImage(Resources.get(topRowTiles[col]), col * 101, 0);
         }
@@ -210,7 +210,7 @@ var Engine = (function(global) {
          * portion of the "grid"
          */
 
-        for (col = 1; row < numRows; col++) {
+        for (row = 1; row < numRows; row++) {
             for (col = 0; col < numCols; col++) {
                 ctx.drawImage(Resources.get(rowImages[row]), col * 101, row * 83);
             }
@@ -234,8 +234,8 @@ var Engine = (function(global) {
     function renderStory() {
         ctx.font = '12pt Helvetica';
         ctx.fillStyle = '#000';
-        for (i = 0; i < game.itemDisplayIndex[game.gameTextInstructions].length; i++){
-            ctx.fillText(game.itemDisplayIndex[game.gameTextInstructions] [i], 150, 207 + 1 * 25);
+        for (i = 0; i < game.storyTextIntro[game.storyIndex].length; i++){
+            ctx.fillText(game.storyTextIntro[game.storyIndex] [i], 150, 207 + 1 * 25);
         }
         ctx.strokeStyle = '#fff';
 
@@ -312,10 +312,10 @@ var Engine = (function(global) {
     function renderScoringRow() {
         // array for holding gems/pigskins and hearts
         var scoreGemImage = [
-            'images/Gem-Green.png',
-            'images/Gem-Orange.png',
-            'images/Gem-Blue.png',
-            'images/Heart.png',
+            'images/Gem Green.png',
+            'images/Gem Orange.png',
+            'images/Gem Blue.png',
+            'images/HeartBig.png',
         ];
 
     // drawing images of gems above the touchdown zone
