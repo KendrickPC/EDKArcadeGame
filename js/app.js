@@ -1,9 +1,9 @@
 // define 'game' variable and hold functions called to 'game' in engine.js 
 var Game = function() {
     // initializing game variables    
-    this.paused=false;
-    this.gameOn=false;
-    this.itemDisplayIndex=0;
+    this.paused = false;
+    this.gameOn = false;
+    this.itemDisplayIndex = 0;
     this.gameTextInstructions = [
         ['abcdefg','12345','abcdefg','12345','abcdefg','12345','abcdefg','12345','abcdefg','12345']
     ]
@@ -103,7 +103,7 @@ Enemy.prototype.reset = function(){
 };
 // increaseRate to increase enemy speeds
 Enemy.prototype.increaseRate = function() {
-    this.rate +=50;
+    this.multiplier +=50;
 };
 
 // Global scope variable of Player class
@@ -125,27 +125,44 @@ var Player = function(x, y) {
     this.count = 0;
 };
 
+/* Handle keyboard input during gameplay.
+ * 'IF' statements verify movement will not allow the player outside the
+ * canvas boundaries before the movement is calculated.
+ * @param {String} key, the keyCode from the key pressed
+ */
 Player.prototype.handleInput = function(direction) {
 
-    if (direction === 'up') {
-        this.y = this.y - 80;
-
-    } else if (direction === 'down') {
-        this.y = this.y + 80;
-
-    } else if (direction === 'left') {
-        this.x = this.x - 101;
-
-    } else if (direction === 'right') {
-        this.x = this.x + 101;
-    }
-
-    if (this.x < 0 || this.x > 606) {
-        this.reset();
-    } else if (this.y < -20 || this.y > 404) {
-        this.reset();
-    }
+  // establish right boundary
+  switch(key) {
+    case 'up':
+      if (this.y > 0 && !game.paused){
+        this.y -= 83;
+      }
+      break;
+    case 'down':
+      if (this.y < 404 && !game.paused) {
+        this.y += 83;
+      }
+      break;
+    case 'left':
+      if (this.x > 0 && !game.paused) {
+        this.x -= 101;
+      }
+      break;
+    case 'right':
+      if (this.x < 556 && !game.paused){
+        this.x += 101;
+      }
+      break;
+    case 'pause':
+      game.togglePause();
+      break;
+    case 'restart':
+      game.gameReset();
+      break;
+  }
 };
+
 
 Player.prototype.update = function() {
     this.x = this.x;
