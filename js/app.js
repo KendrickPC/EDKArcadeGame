@@ -3,30 +3,40 @@ var Game = function() {
     // initializing game variables    
     this.paused = false;
     this.gameOn = false;
-    this.itemDisplayIndex = 0;
-    this.gameTextInstructions = [
-        ['abcdefg','12345','abcdefg','12345','abcdefg','12345','abcdefg','12345','abcdefg','12345']
+    this.storyIndex = 0;
+    this.storyTextIntro = [
+        ['Score Touchdowns!',
+        '',
+        '',
+        '1. Collect five gems each to increase',
+        '   Player life by 1.',
+        '2. Collect Red Heart and a add life.'],
+        ['',
+        '',
+        '',
+        '                       Game Over         ',
+        '',
+        '']
     ]
 };
 
-// global scope 'game' variable that initializes my game, but can't be placed on the top of the file
-game = new Game();
+
 
 // Boolean (used in Enemy.update and Player.handleInput) that toggles between paused and un-paused game states by blocking updates
-Game.prototype.togglePause=function() {
-    this.paused=!this.paused;
+Game.prototype.togglePause = function() {
+    this.paused = !this.paused;
 }
 // Increases one enemy at the end of successful run count through the player count variable
-Game.prototype.addOneEnemy=function()  {
+Game.prototype.addOneEnemy = function()  {
 // Adding one more enemy is determined by summing up all current enemies and adding one more enemy to the next row. When all rows are filled, enemies will be added to the first row again.
-  var rows=4;
-  var count=allEnemies.length+1;
+  var rows = 4;
+  var count = allEnemies.length + 1;
 // Enemies loop  to the top if the count is > than rows available
-  if(count>rows) {
-    count-=rows;
+  if(count > rows) {
+    count -= rows;
   }
 // Adding a new Enemy to the allEnemies array
-  var enemy = new Enemy(-100, (count*83)-21);
+  var enemy = new Enemy(-100, (count * 83) -21);
   allEnemies.push(enemy);
 }
 
@@ -34,27 +44,31 @@ Game.prototype.addOneEnemy=function()  {
 Game.prototype.gameReset=function(){
     // Place all enemy objects in an array called allEnemies
     allEnemies=[];
-    for(var i=0; i<5; i++) {
-        var enemy=new Enemy(0-1*101, 83*i-21);
+    for(var i=1; i<5; i++) {
+        var enemy = new Enemy(0-1*101, 83*i-21);
         allEnemies.push(enemy);
     }
+    // Create a gem offscreen and randomize its location. 
+    // Does not use 'var' so gem is located on the global scope
+    gem = new Gem(-100, -100);
+    gem.reset();
     // storing main character object in a variable 'player'
     // Note: 'var' is not used so that player is stored in the global scope
-    player = new Player(303,380);
+    player = new Player(303, 380);
     // turns on game indicator
-    this.gameOn=true;
+    this.gameOn = true;
 };
 
-// handleInput links to the keyboard during the introduction frame of the game; displays gameplay instructions on game board and starts the game. @param {String} direction value of keypress is determined in the eventListener. 
+// handleInput links to the keyboard during the introduction frame of the game; displays gameplay instructions on game board and starts the game. @param {String} key value of keypress is determined in the eventListener. 
 
-Game.prototype.handleInput=function(direction) {
-    switch(direction) {
+Game.prototype.handleInput=function(key) {
+    switch(key) {
       case 'spacebar':
-        if (game.itemDisplayIndex<0) {
-            game.itemDisplayIndex++;
+        if (game.storyIndex < 0) {
+            game.storyIndex++;
             game.speakerToggle();
         }   else {
-            game.itemDisplayIndex=1;
+            game.storyIndex = 1;
             document.getElementById('instructions').className='';
             game.gameReset();
         }
@@ -71,26 +85,18 @@ var Enemy = function(x, y) {
     this.sprite = 'images/enemy-bug.png';
     this.x = x;
     this.y = y;
-    this.multiplier = Math.floor((Math.random() * 4) + 1);
-    // console.log(this.multiplier);
+    this.rate = 100 + Math.floor(Math.random() * 150);
 };
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update=function(dt) {
-    // You should multiply any movement by the dt parameter
-    // which will ensure the game runs at the same speed for
-    // all computers.
-    this.x = this.x + 101 * dt * this.multiplier;
-
-    if (this.y == player.y && (this.x > player.x - 20 && this.x < player.x + 20)) {
-        // console.log('Collision Logic Successful!!!');
-        player.reset();
+    if (!game.paused){
+        this.x = this.x + (dt * this.rate);
     }
 
-    // If the officer goes off screen, this if statement resets their position with a random multiplier
-    if (this.x > 720) {
-        this.multiplier = Math.floor((Math.random() * 4) + 1);
-        this.reset();
+    // When an enemy goes offscreen, it reappears on the other side
+    if (this.x > 680) {
+        this.x = - Math.random() * 180;
     }
 };
 // Draw the enemy on the screen, required method for game
@@ -99,11 +105,11 @@ Enemy.prototype.render = function() {
 };
 
 Enemy.prototype.reset = function(){
-    this.x = -200;
+    this.x = 0 - Math.random() * 200;
 };
 // increaseRate to increase enemy speeds
 Enemy.prototype.increaseRate = function() {
-    this.multiplier +=50;
+    this.rate += 50;
 };
 
 // Global scope variable of Player class
@@ -125,12 +131,51 @@ var Player = function(x, y) {
     this.count = 0;
 };
 
+// updates score by counting gem points
+Player.prototype.score = function () {
+    if(gem.sprite === "images/Gem-Green.png") {
+        this.greenGemScore++;
+        gem.greenGemCount++;
+        this.resetScore +=30;
+    } else if(gem.sprite === "images/Gem-Orange.png") {
+        this.orangeGemScore++;
+        gem.orangeGemCount++;
+        this.resetScore+=30;
+    } else if(gem.sprite === "images/Gem-Blue.png") {
+        this.blueGemScore++;
+        gem.blueGemCount++;
+        this.resetScore+=30;
+    } else {
+        this.playerLives++;
+    }
+}
+
+
+// Reset main player to starting position
+Player.prototype.reset = function() {
+    // reset main player sprite
+    if (this.y > 0 || (this.y < 0 && (!this.carryGem || !this.carryPowerUp))) {
+        this.sprite = 'images/char-boy.png';
+    }
+
+    // If player is carrying the pigskin or powerup, set carryGem to false and carryPowerUp to false. Also, modify sprite name to main player carrying the pigskin.
+
+    if (this.carryGem || this.carryPowerUp) {
+        this.carryGem = false;
+        this.carryPowerUp = false;
+        this.sprite = 'images/char-boy.png'
+    }
+    // reset main character to initial location
+    this.x = 303;
+    this.y = 380;
+};
+
 /* Handle keyboard input during gameplay.
  * 'IF' statements verify movement will not allow the player outside the
  * canvas boundaries before the movement is calculated.
  * @param {String} key, the keyCode from the key pressed
  */
-Player.prototype.handleInput = function(direction) {
+Player.prototype.handleInput = function(key) {
 
   // establish right boundary
   switch(key) {
@@ -163,32 +208,9 @@ Player.prototype.handleInput = function(direction) {
   }
 };
 
-
-Player.prototype.update = function() {
-    this.x = this.x;
-    this.y = this.y;
-};
 // Draw/render player onto screen
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-};
-// Reset main player to starting position
-Player.prototype.reset = function() {
-    // reset main player sprite
-    if (this.y > 0 || (this.y <0 ** (!this.carryGem || !this.carryPowerUp))) {
-        this.sprite = 'images/char-boy.png';
-    }
-
-    // If player is carrying the pigskin or powerup, set carryGem to false and carryPowerUp to false. Also, modify sprite name to main player carrying the pigskin.
-
-    if (this.carryGem || this.carryPowerUp) {
-        this.carryGem = false;
-        this.carryPowerUp = false;
-        this.sprite = 'images/char-boy.png'
-    }
-    // reset main character to initial location
-    this.x = 303;
-    this.y = 380;
 };
 
 // Create an images array of gems and hearts
@@ -201,10 +223,10 @@ gemImages = [
 
 // Defining Gem class
 var Gem = function (x, y) {
+    this.sprite = gemImages[Math.floor(Math.random() * 4)];
     this.x = x;
     this.y = y;
     this.visible = true;
-    this.sprite = gemImages[Math.floor(Math.random() * 4)];
     // Counts the green gems collected
     this.greenGemCount = 0;
     // Counts the orange gems collected
@@ -213,35 +235,80 @@ var Gem = function (x, y) {
     this.blueGemCount = 0;
 };
 
+// Writing out code for when the main player picks up a Gem/Pigskin
+Gem.prototype.pickup = function () {
+    // setting parameters for gem objects
+    this.visible = false;
+    player.carryGem = true;
+    // changes player's sprite image to show that a gem is being carried
+    player.sprite = 'images/char-boy-w-bag.png';
+    this.x = -101
+    this.y = -101
+};
+
+// Drops the gem if enemy hits a player
+Gem.prototype.drop = function() {
+    this.visible = true;
+    player.carryGem = false;
+    this.x = player.x;
+    this.y = player.y;
+};
+
+Gem.prototype.reset = function() {
+    this.x = Math.floor(Math.random() * 5) * 101;
+    this.y = Math.ceil(Math.random() * 4) * 83 - 11;
+    this.visible = true;
+    this.sprite = gemImages[Math.floor(Math.random() * 4)];
+};
+
+Gem.prototype.hide = function() {
+    this.visible = false;
+    player.carryGem = false;
+};
+
 // Draw the Gem/Pigskin on the playingField
 Gem.prototype.render = function () {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-// Writing out code for when the main player picks up a Gem/Pigskin
-Gem.prototype.pickup = function () {
-
-}
-// Place the player object in a variable called player
-
-
-// var ladyBugYValues = [220, 140, 60];
-// for (var i = 0; i < 15; i++) {
-//     var x = Math.floor((Math.random() * -1000) + 1);
-//     var y = ladyBugYValues[Math.floor((Math.random() * 3))];
-//     enemy = new Enemy(x, y);
-//     allEnemies.push(enemy);
-// } 
-player = new Player(303, 380);
+// global scope 'game' variable that initializes my game, but can't be placed on the top of the file
+game = new Game();
 
 // This listens for key presses and sends the keys to your
-// Player.handleInput() method. You don't need to modify this.
-document.addEventListener('keyup', function(e) {
-    var allowedKeys = {
-        37: 'left',
-        38: 'up',
-        39: 'right',
-        40: 'down'
+// Player.handleInput() method.
+// eventListener 'keydown' allows the introscreen to scroll up when the spacebar is pressed
+document.addEventListener('keydown', function(e) {
+    var allowedKeys;
+    if (!game.gameOn) {
+        allowedKeys = {
+            32: 'spacebar'
+        };
+        game.handleInput(allowedKeys[e.keyCode]);
+    }   else {
+        allowedKeys = {
+            32: 'spacebar',
+            37: 'left',
+            38: 'up',
+            39: 'right',
+            40: 'down',
+            80: 'pause',
+            82: 'restart'
     };
     player.handleInput(allowedKeys[e.keyCode]);
+        }
+    if (e.keyCode in allowedKeys){
+        e.preventDefault();
+    }
 });
+
+//timeout method to update timer on canvas
+  function timeout() {   
+  var id = setInterval(frame, 30000);
+  function frame() {
+    if(powerup.timer > 0) {
+      powerup.timer--;
+    } else {
+      clearInterval(id);
+    }
+  }
+}
