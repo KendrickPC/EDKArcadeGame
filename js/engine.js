@@ -10,7 +10,7 @@ var Engine = (function(global) {
         lastTime;
 
     canvas.width = 707;
-    canvas.height = 656;
+    canvas.height = 585;
     document.getElementById('game-board').appendChild(canvas);
     // doc.body.appendChild(canvas);
 
@@ -240,7 +240,7 @@ var Engine = (function(global) {
         ctx.strokeStyle = '#fff';
 
         var helpText = 'Press the spacebar to continue';
-        if (game.gameTextInstructions < 1) {
+        if (game.storyIndex < 1) {
             helpText = 'Press the spacebar to continue';
         } else {
             helpText = 'Press the spacebar to continue'}
