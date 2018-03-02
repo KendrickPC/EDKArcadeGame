@@ -10,6 +10,7 @@ var Engine = (function(global) {
         lastTime;
 
     canvas.width = 707;
+    // changed canvas.height from 585 to 656
     canvas.height = 585;
     document.getElementById('game-board').appendChild(canvas);
     // doc.body.appendChild(canvas);
@@ -231,23 +232,25 @@ var Engine = (function(global) {
     }
 
     // The following function takes code from the storyText array in the app.js file - renders the text in the story bbuble above. helpText is rendered at the bottom of screen to indicate the spacebar key function.
-    function renderStory() {
-        ctx.font = '12pt Helvetica';
-        ctx.fillStyle = '#000';
-        for (i = 0; i < game.storyTextIntro[game.storyIndex].length; i++){
-            ctx.fillText(game.storyTextIntro[game.storyIndex] [i], 150, 207 + 1 * 25);
-        }
-        ctx.strokeStyle = '#fff';
+    function renderStory () {
+      ctx.font = '16pt Helvetica';
+      ctx.fillStyle = '#000';
+      for (var i=0; i < game.storyTextIntro[game.storyIndex].length; i++){
+        ctx.fillText(game.storyTextIntro[game.storyIndex][i],150,207 + i * 25);
+      }
+      ctx.strokeStyle = '#fff';
 
-        var helpText = 'Press the spacebar to continue';
-        if (game.storyIndex < 1) {
-            helpText = 'Press the spacebar to continue';
-        } else {
-            helpText = 'Press the spacebar to continue'}
-        ctx.lineWidth = 5;
-        ctx.strokeText(helpText, 225, 515);
-        ctx.fillText(helpText, 225, 515);
-        }
+      var helpText = 'Press Spacebar to continue';
+      if (game.storyIndex < 1){
+        helpText = 'Press Spacebar to continue';
+      } else {
+        helpText = 'Press Spacebar to play again';
+      }
+      ctx.lineWidth = 5;
+      ctx.strokeText(helpText,225,515);
+      ctx.fillText(helpText,225,515);
+    }
+
 
     /**
      * Draws a rounded rectangle using the current state of the canvas. 
