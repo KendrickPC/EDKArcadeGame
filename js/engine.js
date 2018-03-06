@@ -11,8 +11,8 @@ var Engine = (function(global) {
 
     canvas.width = 707;
     // changed canvas.height from 585 to 656
-    canvas.height = 585;
-    document.getElementById('game-board').appendChild(canvas);
+    canvas.height = 655;
+    document.getElementById('football-field').appendChild(canvas);
     // doc.body.appendChild(canvas);
 
     /* This function serves as the kickoff point for the game loop itself
@@ -96,7 +96,7 @@ var Engine = (function(global) {
             player.playerLives--;
             // dropping of Gem when player carrying
             if(player.carryGem) {
-              if(gem.sprite === "images/Heart.png") {
+              if(gem.sprite === "images/ballHeart.png") {
               gem.reset();
               } else {
                 gem.drop();
@@ -135,7 +135,7 @@ var Engine = (function(global) {
                 gem.blueGemCount = 0;
             }
 
-        if(gem.sprite === "images/Heart.png") {
+        if(gem.sprite === "images/ballHeart.png") {
             player.totalScore += 0;
             }
         else {
@@ -193,7 +193,7 @@ var Engine = (function(global) {
                 'images/stone-block.png',   // Row 1 of 3 of stone
                 'images/stone-block.png',   // Row 2 of 3 of stone
                 'images/stone-block.png',   // Row 3 of 3 of stone
-                'images/grass-block.png',   // Row 1 of 2 of grass
+                'images/stone-block.png',   // Row 1 of 2 of stone
                 'images/grass-block.png'    // Row 2 of 2 of grass
             ],
             numRows = 6,
@@ -233,7 +233,7 @@ var Engine = (function(global) {
 
     // The following function takes code from the storyText array in the app.js file - renders the text in the story bbuble above. helpText is rendered at the bottom of screen to indicate the spacebar key function.
     function renderStory () {
-      ctx.font = '16pt Helvetica';
+      ctx.font = '12pt Helvetica';
       ctx.fillStyle = '#000';
       for (var i=0; i < game.storyTextIntro[game.storyIndex].length; i++){
         ctx.fillText(game.storyTextIntro[game.storyIndex][i],150,207 + i * 25);
@@ -330,7 +330,7 @@ var Engine = (function(global) {
     var scoreNum = [player.greenGemScore, player.orangeGemScore, player.blueGemScore, player.playerLives]
 
     // gemName is an array to hold gem/pigskin name and player life
-    var gemName = ['Green Gem', 'Orange Gem', 'Blue Gem', 'Player Life']
+    var gemName = ['      Green', '     Orange', '        Blue', '    Player Life']
 
     // text for gem score and gem name on board
     for(var i = 0; i < 4; i++) {
@@ -352,22 +352,20 @@ var Engine = (function(global) {
      * all of these images are properly loaded our game will start.
      */
   Resources.load([
+    'images/footballPlayer.png',
+    'images/footballPlayerWithBall.png',
+    'images/defender.png',
     'images/stone-block.png',
     'images/wood-block.png',
     'images/grass-block.png',
-    'images/enemy-bug.png',
-    'images/Gem-Blue.png',
-    'images/Gem-Orange.png',
-    'images/Gem-Green.png',
-    'images/Heart.png',
-    'images/char-boy.png',
-    'images/char-boy-w-bag.png',
-    'images/char-boy-w-star.png',
+    'images/ballBlue.png',
+    'images/ballGreen.png',
+    'images/ballOrange.png',
+    'images/ballHeart.png',
     'images/Gem Green.png',
     'images/Gem Orange.png',
     'images/Gem Blue.png',
     'images/HeartBig.png',
-    'images/Star.png'
   ]);
     Resources.onReady(init);
 
