@@ -231,17 +231,17 @@ var Engine = (function(global) {
         renderStory();
     }
 
-    // The following function takes code from the storyText array in the app.js file - renders the text in the story bbuble above. helpText is rendered at the bottom of screen to indicate the spacebar key function.
+    // The following function takes code from the itemDisplayIndex array in the app.js file - renders the text in the story bbuble above. helpText is rendered at the bottom of screen to indicate the spacebar key function.
     function renderStory () {
       ctx.font = '12pt Helvetica';
       ctx.fillStyle = '#000';
-      for (var i=0; i < game.storyTextIntro[game.storyIndex].length; i++){
-        ctx.fillText(game.storyTextIntro[game.storyIndex][i],150,207 + i * 25);
+      for (var i=0; i < game.beginningTextIntro[game.itemDisplayIndex].length; i++){
+        ctx.fillText(game.beginningTextIntro[game.itemDisplayIndex][i],150,207 + i * 25);
       }
       ctx.strokeStyle = '#fff';
 
       var helpText = 'Press Spacebar to continue';
-      if (game.storyIndex < 1){
+      if (game.itemDisplayIndex < 1){
         helpText = 'Press Spacebar to continue';
       } else {
         helpText = 'Press Spacebar to play again';
@@ -315,10 +315,10 @@ var Engine = (function(global) {
     function renderScoringRow() {
         // array for holding gems/pigskins and hearts
         var scoreGemImage = [
-            'images/Gem Green.png',
-            'images/Gem Orange.png',
-            'images/Gem Blue.png',
-            'images/HeartBig.png',
+            'images/scoreGreen.png',
+            'images/scoreOrange.png',
+            'images/scoreBlue.png',
+            'images/scoreHeart.png',
         ];
 
     // drawing images of gems above the touchdown zone
@@ -340,7 +340,7 @@ var Engine = (function(global) {
         ctx.strokeText(gemName[i], (i * 200), 20);
         ctx.fillText(gemName[i], (i * 200), 20);
     }
-    // text for main player's total score on playingField
+    // text for main player's total score on football-field
     ctx.lineWidth = 5;
     ctx.strokeText('Player Score: ' + player.totalScore, 402, 575);
     ctx.fillText('Player Score: ' + player.totalScore, 402, 575);
@@ -362,10 +362,10 @@ var Engine = (function(global) {
     'images/ballGreen.png',
     'images/ballOrange.png',
     'images/ballHeart.png',
-    'images/Gem Green.png',
-    'images/Gem Orange.png',
-    'images/Gem Blue.png',
-    'images/HeartBig.png',
+    'images/scoreGreen.png',
+    'images/scoreOrange.png',
+    'images/scoreBlue.png',
+    'images/scoreHeart.png',
   ]);
     Resources.onReady(init);
 

@@ -20,13 +20,18 @@ h3 {
 }
 
 #football-field {
-  margin-top: 2em;
+  margin-top: 1em;
 }
 
 #instructions {
-  margin-top: -75px;
+  margin-top: 0px;
   color: black;
 }
+
+/*#title {
+  margin-bottom: -25px;
+  font-style: bold;
+}*/
 
 /*kbd is used for instructions below the game-board/football field*/    
 /* CSS code for keyboard key text from

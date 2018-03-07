@@ -3,23 +3,23 @@ var Game = function() {
   // Initialize game variables
   this.paused = false;
   this.gameOn = false;
-  this.storyIndex = 0;
+  this.itemDisplayIndex = 0;
 
-  /* Create array of text items to be displayed on screen. Set storyIndex
+  /* Create array of text items to be displayed on screen. Set itemDisplayIndex
    * to keep track of item being displayed.
    */
 
-  this.storyTextIntro = [
-        ['Hi there! Are you ready to play this game?',
+  this.beginningTextIntro = [
+        ['Note: This game will only work with a keyboard.',
         '',
-        '',
-        '1. Collect five gems each to increase',
-        '   Player life by 1.',
-        '2. Collect Red Heart add life.'],
+        'Ready to score some touchdowns?',
+        '1. Collect five colored balls to increase',
+        '   your life by 1 heart.',
+        '2. Grab a red heart and add a life.'],
         ['',
         '',
         '',
-        '                       Game Over         ',
+        '    Game Over, but play again by pressing the spacebar!         ',
         '',
         '']
       ]
@@ -82,14 +82,14 @@ Game.prototype.gameReset = function() {
  * is complete, show gameplay instructions below game board and start game.
  * @param {String} key Value of keypress, as determined in the event listener.
  */
-Game.prototype.handleInput = function(key) {
-  switch(key) {
+Game.prototype.handleInput = function(direction) {
+  switch(direction) {
     case 'spacebar':
-      if (game.storyIndex < 0){
-        game.storyIndex++;
+      if (game.itemDisplayIndex < 0){
+        game.itemDisplayIndex++;
         game.speakerToggle();
       } else {
-        game.storyIndex = 1;
+        game.itemDisplayIndex = 1;
         document.getElementById('instructions').className = '';
         game.gameReset();
       }
@@ -102,7 +102,7 @@ Game.prototype.handleInput = function(key) {
  * @param {number} y    Y coordinate of enemy displayed.
  */
 var Enemy = function(x, y) {
-  this.sprite = 'images/enemy-bug.png';
+  this.sprite = 'images/defender.png';
   this.x = x;
   this.y = y;
   this.rate = 100 + Math.floor(Math.random() * 150);
@@ -143,7 +143,7 @@ Enemy.prototype.render = function() {
  * @param {number} y    Y coordinate of player location.
  */
 var Player = function(x,y) {
-  this.sprite = 'images/char-boy.png';
+  this.sprite = 'images/footballPlayer.png';
   this.x = x;
   this.y = y;
   this.carryGem = false;
@@ -158,15 +158,15 @@ var Player = function(x,y) {
 
 //update score according to gem type
 Player.prototype.score = function() {
-  if(gem.sprite === "images/Gem-Blue.png"){
+  if(gem.sprite === "images/blueBall.png"){
       this.blueGemScore++;
       gem.blueGemCount++;
       this.resetScore+=30;
-  } else if(gem.sprite === "images/Gem-Orange.png"){
+  } else if(gem.sprite === "images/orangeBall.png"){
       this.orangeGemScore++;
       gem.orangeGemCount++;
       this.resetScore+=30;
-  } else if(gem.sprite === "images/Gem-Green.png"){
+  } else if(gem.sprite === "images/greenBall.png"){
       this.greenGemScore++;
       gem.greenGemCount++;
       this.resetScore+=30;
@@ -179,7 +179,7 @@ Player.prototype.score = function() {
 Player.prototype.reset = function() {
   //reset player sprite to char-boy
   if (this.y > 0 || (this.y < 0 && (!this.carryGem || !this.carryPowerUp))) {
-    this.sprite = 'images/char-boy.png';
+    this.sprite = 'images/footballPlayer.png';
   }
 
   //  If player is carrying a Gem or powerup, set carryGem to false and carryPowerUp to false and
@@ -188,7 +188,7 @@ Player.prototype.reset = function() {
   if (this.carryGem || this.carryPowerUp) {
     this.carryGem = false;
     this.carryPowerUp = false;
-    this.sprite = 'images/char-boy.png';
+    this.sprite = 'images/footballPlayer.png';
   }
     //reset back to intial location 
     this.x = 303;
@@ -198,12 +198,12 @@ Player.prototype.reset = function() {
 /* Handle keyboard input during gameplay.
  * 'IF' statements verify movement will not allow the player outside the
  * canvas boundaries before the movement is calculated.
- * @param {String} key, the keyCode from the key pressed
+ * @param {String} direction, the keyCode from the direction pressed
  */
-Player.prototype.handleInput = function(key) {
+Player.prototype.handleInput = function(direction) {
 
   // establish right boundary
-  switch(key) {
+  switch(direction) {
     case 'up':
       if (this.y > 0 && !game.paused){
         this.y -= 83;
@@ -242,10 +242,10 @@ Player.prototype.render = function() {
 
 //array of gem images
 gemImages = [
-          'images/Gem-Blue.png',
-          'images/Gem-Orange.png',
-          'images/Gem-Green.png',
-          'images/Heart.png'
+          'images/ballBlue.png',
+          'images/ballOrange.png',
+          'images/ballGreen.png',
+          'images/ballHeart.png'
         ];
 
 
@@ -258,9 +258,9 @@ var Gem = function (x, y) {
   this.x = x;
   this.y = y;
   this.visible = true;
-  this.blueGemCount = 0;    // count blue gem collect
-  this.orangeGemCount = 0;  // count orange gem collect
-  this.greenGemCount = 0;   // count green gem collect
+  this.blueGemCount++;    // count blue gem collect (not working)
+  this.orangeGemCount++;  // count orange gem collect (not working)
+  this.greenGemCount++;   // count green gem collect (not working)
 };
 
 // Steps to be carried out when an Gem is picked up by the player
@@ -270,7 +270,7 @@ Gem.prototype.pickup = function() {
   player.carryGem = true;
 
   // Change player sprite name to show Gem carried 
-  player.sprite = 'images/char-boy-w-bag.png';
+  player.sprite = 'images/footballPlayerWithBall.png';
 
   // Hide Gem off screen (to be reused on reset)
   this.x = -101;
@@ -300,7 +300,7 @@ Gem.prototype.hide = function() {
 };
 
 // Draw the Gem on the game board
-Gem.prototype.render = function() {
+Gem.prototype.render = function () {
   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
@@ -308,8 +308,9 @@ Gem.prototype.render = function() {
 game = new Game();
 
 /* This listens for key presses and sends the keys to your handleInput() methods.
- * Also prevents standard responses to key presses.
- */
+*/
+
+// 'keydown' prevents the spacebar from scrolling down during the introduction scene for the game
 document.addEventListener('keydown', function(e) {
   var allowedKeys;
   if (!game.gameOn) {

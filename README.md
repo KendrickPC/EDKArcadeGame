@@ -12,3 +12,4 @@ https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API
 
 Changes Needed to be made: 
 [] Engine.js method array scoreGemImage needs to be changed out
+[] Player goes down too far south. Fix changes. 
