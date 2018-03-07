@@ -159,16 +159,16 @@ var Player = function(x,y) {
 //update score according to gem type
 Player.prototype.score = function() {
   if(gem.sprite === "images/blueBall.png"){
-      this.blueGemScore++;
-      gem.blueGemCount++;
+      this.blueGemScore = 0;
+      gem.blueGemCount = 0;
       this.resetScore+=30;
   } else if(gem.sprite === "images/orangeBall.png"){
-      this.orangeGemScore++;
-      gem.orangeGemCount++;
+      this.orangeGemScore = 0;
+      gem.orangeGemCount = 0;
       this.resetScore+=30;
   } else if(gem.sprite === "images/greenBall.png"){
-      this.greenGemScore++;
-      gem.greenGemCount++;
+      this.greenGemScore = 0;
+      gem.greenGemCount = 0;
       this.resetScore+=30;
   } else {
     this.playerLives++;
