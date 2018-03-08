@@ -258,9 +258,9 @@ var Gem = function (x, y) {
   this.x = x;
   this.y = y;
   this.visible = true;
-  this.blueGemCount = 0;    // count blue ball/gem to a max of 3
-  this.orangeGemCount = 0;  // count orange ball/gem to a max of 3
-  this.greenGemCount = 0;   // count green ball/gem to a max of 3
+  this.blueGemCount = 0;    // count blue ball/gem
+  this.orangeGemCount = 0;  // count orange ball/gem
+  this.greenGemCount = 0;   // count green ball/gem
 };
 
 // Steps to be carried out when an Gem is picked up by the player
