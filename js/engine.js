@@ -10,10 +10,8 @@ var Engine = (function(global) {
         lastTime;
 
     canvas.width = 707;
-    // changed canvas.height from 585 to 656
     canvas.height = 655;
     document.getElementById('football-field').appendChild(canvas);
-    // doc.body.appendChild(canvas);
 
     /* This function serves as the kickoff point for the game loop itself
      * and handles properly calling the update and render methods.
@@ -136,11 +134,10 @@ var Engine = (function(global) {
             }
 
         if(gem.sprite === "images/ballHeart.png") {
-            player.totalScore += 0;
-            }
-        else {
-            player.totalScore += 30;
-            }
+           player.totalScore += 0;
+        }  else {
+           player.totalScore += 30;
+        }
         // adding 1 into player count to add an enemy
         player.count++;
         // reset the player at the initial position after it reaches the touchdown zone

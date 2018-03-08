@@ -158,17 +158,17 @@ var Player = function(x,y) {
 
 //update score according to gem type
 Player.prototype.score = function() {
-  if(gem.sprite === "images/blueBall.png"){
-      this.blueGemScore = 0;
-      gem.blueGemCount = 0;
+  if(gem.sprite === "images/ballBlue.png"){
+      this.blueGemScore++;
+      gem.blueGemCount++;
       this.resetScore+=30;
-  } else if(gem.sprite === "images/orangeBall.png"){
-      this.orangeGemScore = 0;
-      gem.orangeGemCount = 0;
+  } else if(gem.sprite === "images/ballOrange.png"){
+      this.orangeGemScore++;
+      gem.orangeGemCount++;
       this.resetScore+=30;
-  } else if(gem.sprite === "images/greenBall.png"){
-      this.greenGemScore = 0;
-      gem.greenGemCount = 0;
+  } else if(gem.sprite === "images/ballGreen.png"){
+      this.greenGemScore++;
+      gem.greenGemCount++;
       this.resetScore+=30;
   } else {
     this.playerLives++;
@@ -258,9 +258,9 @@ var Gem = function (x, y) {
   this.x = x;
   this.y = y;
   this.visible = true;
-  this.blueGemCount++;    // count blue gem collect (not working)
-  this.orangeGemCount++;  // count orange gem collect (not working)
-  this.greenGemCount++;   // count green gem collect (not working)
+  this.blueGemCount = 0;    // count blue ball/gem to a max of 3
+  this.orangeGemCount = 0;  // count orange ball/gem to a max of 3
+  this.greenGemCount = 0;   // count green ball/gem to a max of 3
 };
 
 // Steps to be carried out when an Gem is picked up by the player
